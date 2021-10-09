@@ -1,0 +1,123 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+ 
+namespace Problem_06.Birthday_Celebrations
+{
+    abstract class Inhabitant
+    {
+        public Inhabitant(string name)
+        {
+            this.Name = name;
+ 
+        }
+ 
+        public abstract string Name { get; set; }
+    }
+ 
+    interface IAge
+    {
+        int Age { get; set; }
+    }
+ 
+    interface IId
+    {
+        string Id { get; set; }
+    }
+ 
+    interface IBirthDate
+    {
+        DateTime BirthDate { get; set; }
+    }
+ 
+    class Citizen : Inhabitant, IAge, IId, IBirthDate
+    {
+ 
+        public Citizen(string name, string id, int age, DateTime birthDate) : base(name)
+        {
+            this.Id = id;
+            this.Age = age;
+            this.BirthDate = birthDate;
+        }
+        public override string Name { get; set; }
+        public string Id { get; set; }
+        public int Age { get; set; }
+        public DateTime BirthDate { get; set; }
+    }
+ 
+    class Robot : Inhabitant, IId
+    {
+        public Robot(string name, string id) : base(name)
+        {
+            this.Id = id;
+        }
+ 
+        public override string Name { get; set; }
+        public string Id { get; set; }
+    }
+ 
+    class Pet : Inhabitant, IBirthDate
+    {
+        public Pet(string name, DateTime birthDate) : base(name)
+        {
+            this.BirthDate = birthDate;
+        }
+ 
+        public override string Name { get; set; }
+        public DateTime BirthDate { get; set; }
+    }
+ 
+ 
+    class Program
+    {
+        static void Main(string[] args)
+        {
+ 
+            List<IBirthDate> birthDates = new List<IBirthDate>();
+ 
+            string input = Console.ReadLine();
+ 
+            while (input != "End")
+            {
+                string[] data = input.Split();
+ 
+                switch (data[0])
+                {
+                    case "Citizen":
+                        if (data.Length == 5)
+                        {
+                            //Citizen Pesho 22 9010101122 10 / 10 / 1990
+                            DateTime date = DateTime.ParseExact(data[4], "dd/MM/yyyy", null);
+                            birthDates.Add(new Citizen(name: data[1], id: data[3], age: int.Parse(data[2]), birthDate: date));
+                        }
+                        break;
+                    case "Pet":
+                        if (data.Length == 3)
+                        {
+                            //Pet Sharo 13 / 11 / 2005
+                            DateTime date1 = DateTime.ParseExact(data[2], "dd/MM/yyyy", null);
+                            birthDates.Add(new Pet(name: data[1], birthDate: date1));
+ 
+                        }
+                        break;
+                }
+                input = Console.ReadLine();
+            }
+            string year = Console.ReadLine();
+ 
+            foreach (var birthDate in birthDates)
+            {
+                if (birthDate.BirthDate.Year == int.Parse(year))
+                {
+                    Console.WriteLine(birthDate.BirthDate.Date.ToString("dd/MM/yyyy"));
+                    //Console.WriteLine($"{birthDate.BirthDate.Day}/{birthDate.BirthDate.Month}/{birthDate.BirthDate.Year}");
+                }
+            }
+ 
+ 
+        }
+    }
+}
+//Пробвай за BirthDate вместо да използваш DateTime, направо ползвай string
